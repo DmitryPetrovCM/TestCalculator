@@ -111,11 +111,11 @@ export const CalculatorServiceProvider = ({ children }: ICalculatorServiceProvid
   }
 
   const isInitialExpressionValid = (expression: string): boolean => {
-    return Boolean(expression.match(/^[\d+\-*\/()\s]*$/));
+    return Boolean(expression.match(/^[\d.+\-*\/()\s]*$/));
   }
 
   const parseInitialExpression = (expression: string): string[] => {
-    return expression.split(/([+\-*\/()]|[\d]+)/g).filter(Boolean);
+    return expression.split(/([+\-*\/()]|[\b]+)/g).filter(Boolean);
   }
 
   const calculateExpression: ICalculatorServiceContext['calculateExpression'] = (expression: string): TCalculationResult => {
