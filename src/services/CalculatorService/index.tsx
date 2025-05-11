@@ -70,7 +70,7 @@ export const CalculatorServiceProvider = ({ children }: ICalculatorServiceProvid
     }
   }
 
-  const convertExpressionToReversePolishNotation = (expression: string): string[] => {
+  const convertExpressionToReversePolishNotation = (expression: string[]): string[] => {
     const stack: string[] = [];
     const result: string[] = [];
 
@@ -106,9 +106,28 @@ export const CalculatorServiceProvider = ({ children }: ICalculatorServiceProvid
     return [...result, ...stack];
   }
 
+  const removeSpaces = (expression: string): string => {
+    return expression.replace(/\s+/g, '');
+  }
+
+  const isInitialExpressionValid = (expression: string): boolean => {
+    return Boolean(expression.match(/^[\d+\-*\/()\s]*$/));
+  }
+
+  const parseInitialExpression = (expression: string): string[] => {
+    return expression.split(/([+\-*\/()]|[\d]+)/g).filter(Boolean);
+  }
+
   const calculateExpression: ICalculatorServiceContext['calculateExpression'] = (expression: string): TCalculationResult => {
     try {
-      const convertedToPolishExpression = convertExpressionToReversePolishNotation(expression);
+      const spacesLessExpression = removeSpaces(expression);
+
+      if (!isInitialExpressionValid(spacesLessExpression)) {
+        throw new Error('обнаружены некорректные символы');
+      }
+
+      const parsedExpression = parseInitialExpression(spacesLessExpression);
+      const convertedToPolishExpression = convertExpressionToReversePolishNotation(parsedExpression);
       const stack: (string | number)[] = [];
 
       for (const symbol of convertedToPolishExpression) {
@@ -140,10 +159,10 @@ export const CalculatorServiceProvider = ({ children }: ICalculatorServiceProvid
     }
   }
 
-  // calculateExpression('1+2-5*7/(8-2*2)-7*(1+2)/3');
-  // console.log('1 (expected 19) ---- 7+(5-2)*4 = ', calculateExpression('7+(5-2)*4'));
-  // console.log('2 (expected -12.75) ---- 1+2-5*7/(8-2*2)-7*(1+2)/3 = ', calculateExpression('1+2-5*7/(8-2*2)-7*(1+2)/3'));
-  // console.log('3 (expected 17.25)---- 1+32-5*7/(8-2*2)-7*(1+2)/3 = ', calculateExpression('1+32-5*7/(8-2*2)-7*(1+2)/3'));
+  calculateExpression('1+2-5*7/(8-2*2)-7*(1+2)/3');
+  console.log('1 (expected 19) ---- 7+(5-2)*4 = ', calculateExpression('7+(5-2)*4'));
+  console.log('2 (expected -12.75) ---- 1+2-5*7/(8-2*2)-7*(1+2)/3 = ', calculateExpression('1+2-5*7/(8-2*2)-7*(1+2)/3'));
+  console.log('3 (expected 17.25)---- 1+32-5*7/(8-2*2)-7*(1+2)/3 = ', calculateExpression('1+32-5*7/(8-2*2)-7*(1+2)/3'));
 
   return (
     <CalculatorServiceContext.Provider

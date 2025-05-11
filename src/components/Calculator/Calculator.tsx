@@ -10,15 +10,12 @@ export interface ICalculatorOperator {
 export interface ICalculatorProps {
   displayValue: string | number;
   operators?: ICalculatorOperator[];
-
-  onButtonClick(value: number | string): void;
-
-  onInputChange(value: number | string): void;
-
+  onButtonClick(value: string): void;
+  onInputChange(value: string): void;
   onCalculate(): void;
 }
 
-const DIGITS = [1, 2, 3, 4, 5, 6, 7, 8, 9, 0];
+const DIGITS = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '0'];
 const DEFAULT_OPERATORS: ICalculatorOperator[] = [
   { value: '+' },
   { value: '-' },
@@ -47,18 +44,18 @@ export const Calculator: FC<ICalculatorProps> = memo(({
       <div className={styles.keyboardContainer}>
         <div className={classNames(styles.digitsKeyboard, styles.keyboard)}>
           {DIGITS.map((digit) => (
-            <button key={digit} onClick={() => onButtonClick(digit)} className={styles.button}>
+            <button key={digit} onClick={() => onButtonClick(digit)} className={classNames(styles.button, styles.digitButton)}>
               {digit}
             </button>
           ))}
         </div>
         <div className={`${styles.actionsKeyboard} ${styles.keyboard}`}>
           {operators.map(({ value, label }) => (
-            <button key={value} onClick={() => onButtonClick(value)} className={styles.button}>
+            <button key={value} onClick={() => onButtonClick(value)} className={classNames(styles.button, styles.operatorButton)}>
               {label || value}
             </button>
           ))}
-          <button onClick={onCalculate} className={styles.button}> =</button>
+          <button onClick={onCalculate} className={classNames(styles.button, styles.equalsOperatorButton)}> = </button>
         </div>
       </div>
     </div>
