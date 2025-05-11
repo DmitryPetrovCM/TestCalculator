@@ -1,14 +1,33 @@
-import { FC } from 'react';
+import { FC, useCallback, useState } from 'react';
 import { Calculator } from '../../components/Calculator/Calculator.tsx';
+import { useCalculatorService } from '../../services/CalculatorService';
 
 export const AppCalculator: FC = () => {
-    return (
-        <div style={{ width: '400px', height: '650px' }}>
-            <Calculator
-                displayValue={''}
-                onChange={(val) => console.log(val)}
-                onCalculate={() => console.log('calculate')}
-            />
-        </div>
-    )
-}
+  const { calculateExpression } = useCalculatorService();
+  const [expression, setExpression] = useState<string | number>('');
+
+  const handleCalculatorButtonClick = useCallback((value: string | number) => {
+    setExpression((expression) => expression + value);
+  }, []);
+
+  const handleInputChange = useCallback((inputExpression: string | number) => {
+    setExpression(inputExpression);
+  }, []);
+
+  const handleCalculate = useCallback(() => {
+    if (expression) {
+      setExpression(calculateExpression(expression));
+    }
+  }, [expression]);
+
+  return (
+    <div style={{ width: '400px', height: '650px' }}>
+      <Calculator
+        displayValue={expression}
+        onButtonClick={handleCalculatorButtonClick}
+        onInputChange={handleInputChange}
+        onCalculate={handleCalculate}
+      />
+    </div>
+  );
+};
