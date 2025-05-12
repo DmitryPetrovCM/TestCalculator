@@ -1,13 +1,8 @@
 import './App.css';
-import { AppCalculator } from './app/AppCalculator/AppCalculator.tsx';
-import { CalculatorServiceProvider } from './services/CalculatorService';
+import { Calculator } from './modules/CalculatorModule';
 
 const App = () => {
-  return (
-    <CalculatorServiceProvider>
-      <AppCalculator />
-    </CalculatorServiceProvider>
-  );
+  return <Calculator />;
 };
 
 export default App;

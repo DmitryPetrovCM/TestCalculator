@@ -1,6 +1,6 @@
 import { ChangeEvent, FC, memo } from 'react';
-import styles from './Calculator.module.css';
 import classNames from 'classnames';
+import styles from './CalculatorView.module.css';
 
 export interface ICalculatorOperator {
   label?: string;
@@ -22,10 +22,10 @@ const DEFAULT_OPERATORS: ICalculatorOperator[] = [
   { value: '*' },
   { value: '/' },
   { value: '(' },
-  { value: ')' },
+  { value: ')' }
 ];
 
-export const Calculator: FC<ICalculatorProps> = memo(({
+export const CalculatorView: FC<ICalculatorProps> = memo(({
   displayValue,
   operators = DEFAULT_OPERATORS,
   onButtonClick,
@@ -43,7 +43,7 @@ export const Calculator: FC<ICalculatorProps> = memo(({
       </div>
       <div className={styles.keyboardContainer}>
         <div className={classNames(styles.digitsKeyboard, styles.keyboard)}>
-          {DIGITS.map((digit) => (
+          {DIGITS.map(digit => (
             <button key={digit} onClick={() => onButtonClick(digit)} className={classNames(styles.button, styles.digitButton)}>
               {digit}
             </button>
@@ -55,7 +55,9 @@ export const Calculator: FC<ICalculatorProps> = memo(({
               {label || value}
             </button>
           ))}
-          <button onClick={onCalculate} className={classNames(styles.button, styles.equalsOperatorButton)}> = </button>
+          <button onClick={onCalculate} className={classNames(styles.button, styles.equalsOperatorButton)}>
+            =
+          </button>
         </div>
       </div>
     </div>
